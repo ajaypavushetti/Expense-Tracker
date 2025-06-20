@@ -1,0 +1,59 @@
+.register,
+.login {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(to right, #30cfd0 0%, #330867 100%);
+}
+
+.lottie {
+  height: 400px;
+}
+
+.login input , .register input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: rgba(255, 255, 255, 0.568);
+}
+
+.login .ant-input:focus,
+.login .ant-input-focused,
+.register .ant-input:focus,
+.register .ant-input-focused {
+  box-shadow: none !important;
+  outline: none !important;
+  border-color: rgba(255, 255, 255, 0.705) !important;
+}
+
+.login .ant-input:hover,
+.register .ant-input:hover {
+  border-color: rgba(255, 255, 255, 0.701) !important;
+}
+
+.login .ant-input, 
+.register .ant-input {
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.71) !important;
+  border-radius: 0 !important;
+}
+
+label {
+  color: rgba(255, 255, 255, 0.533) !important;
+}
+
+a {
+  color: rgb(21, 2, 128) !important;
+  text-decoration: none !important;
+}
+
+.register h1 {
+  font-size: 25px;
+  color: white;
+}
+.login h1 {
+  font-size: 25px;
+  color: white;
+}
