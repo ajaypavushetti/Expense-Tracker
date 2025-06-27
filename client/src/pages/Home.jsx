@@ -1,15 +1,60 @@
 import React, { useState } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import '../resources/transactions.css'
-import { Form, Input, Modal, Select } from "antd";
+
+import AddEditTransaction from "../components/AddEditTransaction";
+import { useEffect } from "react";
+import Spinner from "../components/Spinner";
+import { message } from "antd";
+import axios from "axios";
+import { Table } from "antd";
+
 
 const Home = () => {
   const [showAddEditTransactionModal , setshowAddEditTransactionModal] = useState(false);
-  const onFinish=(values)=>{
-    console.log(values);
+     const [loading , setLoading] = useState(false);
+     const [transactionsData,setTransactionsData] = useState([]);
+const getTransactions=async ()=>{
+try {
+  const user= JSON.parse(localStorage.getItem("TrackMint-user"))
+      setLoading(true);
+      const response = await axios.post("/api/transactions/get-all-transactions", {userid: user._id});
+      console.log(response.data);
+      setTransactionsData(response.data);
+      setLoading(false); 
+    } catch (error) {
+      console.error("Error fetching transactions:", error); 
+      setLoading(false);
+      message.error("something went wrong");
+    }
+}
+
+useEffect(()=>{
+  getTransactions()
+},[]);
+
+const columns = [
+  {
+    title : "Date",
+    dataIndex : "date"
+  },
+  {
+    title : "Amount",
+    dataIndex : "amount"
+  },
+  {
+    title : "Category",
+    dataIndex : "category"
+  },
+  {
+    title : "Reference",
+    dataIndex : "reference"
   }
+]
+
   return (
     <DefaultLayout>
+      {loading && <Spinner/>}
       <div className="filter d-flex justify-content-between align-items-center">
         <div>
 
@@ -19,57 +64,17 @@ const Home = () => {
         </div>
       </div>
       <div className="table-analytics">
-
+          <div>
+            <Table columns ={columns} dataSource ={transactionsData} />
+          </div>
       </div>
 
-      <Modal title='Add Transaction'      
-      open={showAddEditTransactionModal} 
-      onCancel={()=>setshowAddEditTransactionModal(false)}
-      footer={false}
-      >
-          <Form layout="vertical" className="transaction-form" onFinish={onFinish}>
-            <Form.Item label="Amount" name="Amount">
-              <Input type='text' />
-            </Form.Item>
-
-            <Form.Item label="Type" name="type">
-              <Select>
-              <Select.Option value='income'>Income</Select.Option>
-              <Select.Option value='expense'>Expense</Select.Option>
-              </Select>
-            </Form.Item>
-            
-            <Form.Item label="Category" name="category">
-              <Select>
-              <Select.Option value='salary'>Salary</Select.Option>
-              <Select.Option value='freelance'>Freelance</Select.Option>
-              <Select.Option value='food'>Food</Select.Option>
-              <Select.Option value='entertainment'>Entertainment</Select.Option>
-              <Select.Option value='education'>Education</Select.Option>
-              <Select.Option value='Medical'>Medical</Select.Option>
-               <Select.Option value='food'>Food</Select.Option>
-              <Select.Option value='tax'>Tax</Select.Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item label="Date" name="date">
-              <Input type="date" />
-            </Form.Item>
-
-            <Form.Item label="Reference" name="reference">
-              <Input type="text" />
-            </Form.Item>
-
-            <Form.Item label="Description" name="Description">
-              <Input type="text" />
-            </Form.Item>
-            <div className="d-flex justify-content-end">
-                <button className="primary" type="submit">
-                  SAVE
-                </button>
-            </div>
-          </Form>
-      </Modal>
+{showAddEditTransactionModal && (<AddEditTransaction 
+showAddEditTransactionModal = {showAddEditTransactionModal}
+setshowAddEditTransactionModal = {setshowAddEditTransactionModal}
+getTransactions={getTransactions}
+/>)}
+    
     </DefaultLayout>
   );
 };

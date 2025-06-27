@@ -2,7 +2,9 @@
   box-shadow: 0 0 3px gray;
   padding: 15px 20px;
   border-radius: 10px;
+  margin-bottom: 20px; /* ✅ Add this */
 }
+
 
 .transaction-form label {
   color: black !important;
