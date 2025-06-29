@@ -11,7 +11,8 @@
   height: 400px;
 }
 
-.login input , .register input {
+.login input,
+.register input {
   background-color: transparent;
   border: none;
   border-bottom: 1px solid white;
@@ -32,7 +33,7 @@
   border-color: rgba(255, 255, 255, 0.701) !important;
 }
 
-.login .ant-input, 
+.login .ant-input,
 .register .ant-input {
   background-color: transparent !important;
   border: none !important;

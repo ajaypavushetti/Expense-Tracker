@@ -8,7 +8,6 @@ import { useState } from "react";
 import Spinner from "../components/Spinner";
 
 const Login = () => {
-   
   const navigate = useNavigate();
   const onFinish = async (values) => {
     try {
@@ -27,15 +26,15 @@ const Login = () => {
     }
   };
 
-useEffect(()=>{
-  if(localStorage.getItem("TrackMint-user")){
-    navigate("/");
-  }
-},[])
+  useEffect(() => {
+    if (localStorage.getItem("TrackMint-user")) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="register">
-      {loading && <Spinner/>}
+      {loading && <Spinner />}
       <div className="row justify-content-center align-items-center w-100 h-100">
         <div className="col-md-4">
           <Form layout="vertical" onFinish={onFinish}>

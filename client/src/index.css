@@ -4,15 +4,15 @@ body {
   margin: 0;
   font-family: "Montserrat", sans-serif !important;
 }
-body,html{
+body,
+html {
   overflow-x: hidden;
 }
-.primary{
-  background-color: #161C51;
+.primary {
+  background-color: #161c51;
   padding: 5px 20px;
   color: white;
   border: none;
 }
 
 /* Make sure Ant Design message popup is visible */
-

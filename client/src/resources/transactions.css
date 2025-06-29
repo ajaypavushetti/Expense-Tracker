@@ -5,7 +5,6 @@
   margin-bottom: 20px; /* ✅ Add this */
 }
 
-
 .transaction-form label {
   color: black !important;
 }
@@ -22,19 +21,19 @@
 }
 
 .transaction-form input:focus {
-    border : 1px solid gray;
-    box-shadow: none !important;
+  border: 1px solid gray;
+  box-shadow: none !important;
 }
 .transaction-form input {
-    border : 1px solid gray;
-    box-shadow: none !important;
+  border: 1px solid gray;
+  box-shadow: none !important;
 }
 
-.ant-select-selector{
-     border : 1px solid gray !important;
+.ant-select-selector {
+  border: 1px solid gray !important;
 }
 
-.ant-select-selector:focus{
-     box-shadow: none !important;
-     outline: none !important;
+.ant-select-selector:focus {
+  box-shadow: none !important;
+  outline: none !important;
 }
