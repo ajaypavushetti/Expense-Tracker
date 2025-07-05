@@ -17,7 +17,7 @@ router.post("/add-transaction", async (req, res) => {
 // Get All Transactions with Frequency Filter
 router.post("/get-all-transactions", async (req, res) => {
   try {
-    const { userid, frequency, selectedRange } = req.body;
+    const { userid, frequency, selectedRange, type } = req.body;
 
     // Calculate the date range based on frequency (in days)
     const startDate = moment().subtract(Number(frequency), "days").toDate();
@@ -33,7 +33,8 @@ router.post("/get-all-transactions", async (req, res) => {
           $lte : selectedRange[1]
         }
 
-    })
+    }),
+    ...(type!== 'all' && {type})
     });
 
     res.status(200).json(transactions);

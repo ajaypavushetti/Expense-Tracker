@@ -7,6 +7,7 @@ import Spinner from "../components/Spinner";
 import { DatePicker, message, Select } from "antd";
 import axios from "axios";
 import { Table } from "antd";
+import {AreaChartOutlined, UnorderedListOutlined} from "@ant-design/icons";
 import moment from "moment";
 const {RangePicker} = DatePicker;
 
@@ -16,7 +17,9 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [transactionsData, setTransactionsData] = useState([]);
   const [frequency , setFrequency]=useState("7");
-  const [selectedRange , setSelectedRange]=useState([])
+  const [type,setType] = useState('all');
+  const [selectedRange , setSelectedRange]=useState([]);
+  const [viewType , setViewType] = useState('table');
 
   const getTransactions = async () => {
     try {
@@ -26,6 +29,7 @@ const Home = () => {
   userid: user._id,
   frequency,
   selectedRange: frequency === "custom" ? selectedRange : [],
+  type
 });
 
 
@@ -39,7 +43,7 @@ const Home = () => {
 
   useEffect(() => {
     getTransactions();
-  }, [frequency, selectedRange]);
+  }, [frequency, selectedRange ,type]);
 
   const columns = [
     {
@@ -56,6 +60,10 @@ const Home = () => {
       dataIndex: "category",
     },
     {
+      title: "Type",
+      dataIndex: "type",
+    },
+    {
       title: "Reference",
       dataIndex: "reference",
     },
@@ -65,7 +73,7 @@ const Home = () => {
     <DefaultLayout>
       {loading && <Spinner />}
       <div className="filter d-flex justify-content-between align-items-center">
-        <div>
+        <div className="d-flex">
           <div className="d-flex flex-column">
             <h6>Select Frequency</h6>
             <Select value={frequency} onChange={(value) => setFrequency(value)}>
@@ -82,8 +90,28 @@ const Home = () => {
               </div>
             ) }
           </div>
+          <div className="d-flex flex-column mx-5">
+            <h6>Select Type</h6>
+            <Select value={type} onChange={(value) => setType(value)}>
+
+              <Select.Option value='all'>All</Select.Option>
+              <Select.Option value='income'>Income</Select.Option>
+              <Select.Option value='expense'>Expense</Select.Option>
+            </Select>
+
+          </div>
         </div>
-        <div>
+        <div className="d-flex">
+            <div>
+                <div className="view-switch mx-5">
+                   <UnorderedListOutlined className={`mx-3 ${viewType === 'table' ? 'active-icon' : 'inactive-icon'}`}
+                   onClick={()=>setViewType('table')}
+                   size={30}/>
+                   <AreaChartOutlined className={`${viewType === 'analytics' ? 'active-icon' : 'inactive-icon'}`}
+                   onClick={()=>setViewType('analytics')}
+                   size={30}/>
+                </div>
+            </div>
           <button
             className="primary"
             onClick={() => setshowAddEditTransactionModal(true)}
@@ -94,7 +122,13 @@ const Home = () => {
       </div>
       <div className="table-analytics">
         <div>
-          <Table columns={columns} dataSource={transactionsData} />
+<Table
+  columns={columns}
+  dataSource={transactionsData}
+  rowKey="_id"
+  pagination={{ pageSize: 6 }}
+/>
+
         </div>
       </div>
 
