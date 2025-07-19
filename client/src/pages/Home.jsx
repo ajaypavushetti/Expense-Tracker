@@ -57,8 +57,8 @@ const Home = () => {
       await axios.post("/api/transactions/delete-transaction", {
         transactionId: record._id,
       });
-message.success("Transaction Deleted Successfully");
-getTransactions()
+      message.success("Transaction Deleted Successfully");
+      getTransactions();
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -104,7 +104,10 @@ getTransactions()
                 setshowAddEditTransactionModal(true);
               }}
             />
-            <DeleteOutlined className="mx-3" onClick={()=>deleteTransaction(record)}/>
+            <DeleteOutlined
+              className="mx-3"
+              onClick={() => deleteTransaction(record)}
+            />
           </div>
         );
       },

@@ -56,3 +56,7 @@
 .inactive-icon{
   color:gray;
 }
+
+.ant-picker-range{
+  border : 1px solid black !important
+}
