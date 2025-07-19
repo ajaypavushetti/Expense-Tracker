@@ -3,33 +3,59 @@ import { Form, Input, message, Modal, Select } from "antd";
 import { useState } from "react";
 import axios from "axios";
 import Spinner from "./Spinner";
-const AddEditTransaction = ({setshowAddEditTransactionModal , showAddEditTransactionModal , selectedItemForEdit , setSelectedItemForEdit ,getTransactions}) => {
-     const [loading , setLoading] = useState(false);
-     const onFinish=async (values)=>{
-        try {
-            const user = JSON.parse(localStorage.getItem("TrackMint-user"))
-          setLoading(true);
-            await axios.post('/api/transactions/add-transaction',{...values , userid : user._id});
-            getTransactions();
-                message.success('Transaction Added Successfully');
-                setshowAddEditTransactionModal(false);
-                setSelectedItemForEdit(null);
-                setLoading(false);
-        } catch (error) {
-   console.error("Error adding transaction:", error);
-            message.error('something went wrong');
-            setLoading(false);
-        }
+const AddEditTransaction = ({
+  setshowAddEditTransactionModal,
+  showAddEditTransactionModal,
+  selectedItemForEdit,
+  setSelectedItemForEdit,
+  getTransactions,
+}) => {
+  const [loading, setLoading] = useState(false);
+  const onFinish = async (values) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("TrackMint-user"));
+      setLoading(true);
+      if (selectedItemForEdit) {
+        await axios.post("/api/transactions/edit-transaction", {
+          payload :{
+            ...values,
+          userid: user._id,
+          }, 
+          transactionId : selectedItemForEdit._id
+        });
+        getTransactions();
+        message.success("Transaction Updated Successfully");
+      } else {
+        await axios.post("/api/transactions/add-transaction", {
+          ...values,
+          userid: user._id,
+        });
+        getTransactions();
+        message.success("Transaction Added Successfully");
+      }
+      setshowAddEditTransactionModal(false);
+      setSelectedItemForEdit(null);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error adding transaction:", error);
+      message.error("something went wrong");
+      setLoading(false);
     }
+  };
   return (
     <Modal
-      title={selectedItemForEdit ? 'Edit Transaction' : 'Add Transaction'}
+      title={selectedItemForEdit ? "Edit Transaction" : "Add Transaction"}
       open={showAddEditTransactionModal}
       onCancel={() => setshowAddEditTransactionModal(false)}
       footer={false}
     >
-         {loading && <Spinner/>}
-      <Form layout="vertical" className="transaction-form" onFinish={onFinish} initialValues={selectedItemForEdit}>
+      {loading && <Spinner />}
+      <Form
+        layout="vertical"
+        className="transaction-form"
+        onFinish={onFinish}
+        initialValues={selectedItemForEdit}
+      >
         <Form.Item label="Amount" name="amount">
           <Input type="number" />
         </Form.Item>

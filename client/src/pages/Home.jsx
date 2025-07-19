@@ -7,7 +7,12 @@ import Spinner from "../components/Spinner";
 import { DatePicker, message, Select } from "antd";
 import axios from "axios";
 import { Table } from "antd";
-import { AreaChartOutlined, DeleteOutlined, EditOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import {
+  AreaChartOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 import Analytics from "../components/Analytics";
 const { RangePicker } = DatePicker;
@@ -15,7 +20,7 @@ const { RangePicker } = DatePicker;
 const Home = () => {
   const [showAddEditTransactionModal, setshowAddEditTransactionModal] =
     useState(false);
-    const [selectedItemForEdit , setSelectedItemForEdit]=useState(null);
+  const [selectedItemForEdit, setSelectedItemForEdit] = useState(null);
   const [loading, setLoading] = useState(false);
   const [transactionsData, setTransactionsData] = useState([]);
   const [frequency, setFrequency] = useState("7");
@@ -26,7 +31,7 @@ const Home = () => {
   const getTransactions = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("TrackMint-user"));
-       
+
       setLoading(true);
       const response = await axios.post(
         "/api/transactions/get-all-transactions",
@@ -39,6 +44,21 @@ const Home = () => {
       );
 
       setTransactionsData(response.data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      message.error("something went wrong");
+    }
+  };
+
+  const deleteTransaction = async (record) => {
+    try {
+      setLoading(true);
+      await axios.post("/api/transactions/delete-transaction", {
+        transactionId: record._id,
+      });
+message.success("Transaction Deleted Successfully");
+getTransactions()
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -75,16 +95,20 @@ const Home = () => {
     {
       title: "Actions",
       dataIndex: "actions",
-      render : (text , record)=>{
-        return <div>
-          <EditOutlined onClick={()=>{
-            setSelectedItemForEdit(record);
-            setshowAddEditTransactionModal(true);
-          }}/>
-          <DeleteOutlined className="mx-3"/>
-        </div>
-      }
-    }
+      render: (text, record) => {
+        return (
+          <div>
+            <EditOutlined
+              onClick={() => {
+                setSelectedItemForEdit(record);
+                setshowAddEditTransactionModal(true);
+              }}
+            />
+            <DeleteOutlined className="mx-3" onClick={()=>deleteTransaction(record)}/>
+          </div>
+        );
+      },
+    },
   ];
 
   return (
@@ -147,14 +171,18 @@ const Home = () => {
         </div>
       </div>
       <div className="table-analytics">
-        {viewType === 'table' ? <div>
-          <Table
-            columns={columns}
-            dataSource={transactionsData}
-            rowKey="_id"
-            pagination={{ pageSize: 6 }}
-          />
-        </div> : <Analytics transactions={transactionsData}/>}
+        {viewType === "table" ? (
+          <div>
+            <Table
+              columns={columns}
+              dataSource={transactionsData}
+              rowKey="_id"
+              pagination={{ pageSize: 6 }}
+            />
+          </div>
+        ) : (
+          <Analytics transactions={transactionsData} />
+        )}
       </div>
 
       {showAddEditTransactionModal && (
