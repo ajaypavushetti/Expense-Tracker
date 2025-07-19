@@ -6,6 +6,6 @@ import "antd/dist/reset.css"; // For AntD v5+
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App /> 
+    <App />
   </StrictMode>
 );
