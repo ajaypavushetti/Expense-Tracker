@@ -3,7 +3,7 @@ import { Form, Input, message, Modal, Select } from "antd";
 import { useState } from "react";
 import axios from "axios";
 import Spinner from "./Spinner";
-const AddEditTransaction = ({setshowAddEditTransactionModal , showAddEditTransactionModal , getTransactions}) => {
+const AddEditTransaction = ({setshowAddEditTransactionModal , showAddEditTransactionModal , selectedItemForEdit , setSelectedItemForEdit ,getTransactions}) => {
      const [loading , setLoading] = useState(false);
      const onFinish=async (values)=>{
         try {
@@ -13,6 +13,7 @@ const AddEditTransaction = ({setshowAddEditTransactionModal , showAddEditTransac
             getTransactions();
                 message.success('Transaction Added Successfully');
                 setshowAddEditTransactionModal(false);
+                setSelectedItemForEdit(null);
                 setLoading(false);
         } catch (error) {
    console.error("Error adding transaction:", error);
@@ -22,13 +23,13 @@ const AddEditTransaction = ({setshowAddEditTransactionModal , showAddEditTransac
     }
   return (
     <Modal
-      title="Add Transaction"
+      title={selectedItemForEdit ? 'Edit Transaction' : 'Add Transaction'}
       open={showAddEditTransactionModal}
       onCancel={() => setshowAddEditTransactionModal(false)}
       footer={false}
     >
          {loading && <Spinner/>}
-      <Form layout="vertical" className="transaction-form" onFinish={onFinish}>
+      <Form layout="vertical" className="transaction-form" onFinish={onFinish} initialValues={selectedItemForEdit}>
         <Form.Item label="Amount" name="amount">
           <Input type="number" />
         </Form.Item>

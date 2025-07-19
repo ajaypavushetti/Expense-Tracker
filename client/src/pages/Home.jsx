@@ -7,7 +7,7 @@ import Spinner from "../components/Spinner";
 import { DatePicker, message, Select } from "antd";
 import axios from "axios";
 import { Table } from "antd";
-import { AreaChartOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { AreaChartOutlined, DeleteOutlined, EditOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import moment from "moment";
 import Analytics from "../components/Analytics";
 const { RangePicker } = DatePicker;
@@ -15,6 +15,7 @@ const { RangePicker } = DatePicker;
 const Home = () => {
   const [showAddEditTransactionModal, setshowAddEditTransactionModal] =
     useState(false);
+    const [selectedItemForEdit , setSelectedItemForEdit]=useState(null);
   const [loading, setLoading] = useState(false);
   const [transactionsData, setTransactionsData] = useState([]);
   const [frequency, setFrequency] = useState("7");
@@ -25,6 +26,7 @@ const Home = () => {
   const getTransactions = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("TrackMint-user"));
+       
       setLoading(true);
       const response = await axios.post(
         "/api/transactions/get-all-transactions",
@@ -70,6 +72,19 @@ const Home = () => {
       title: "Reference",
       dataIndex: "reference",
     },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      render : (text , record)=>{
+        return <div>
+          <EditOutlined onClick={()=>{
+            setSelectedItemForEdit(record);
+            setshowAddEditTransactionModal(true);
+          }}/>
+          <DeleteOutlined className="mx-3"/>
+        </div>
+      }
+    }
   ];
 
   return (
@@ -146,7 +161,9 @@ const Home = () => {
         <AddEditTransaction
           showAddEditTransactionModal={showAddEditTransactionModal}
           setshowAddEditTransactionModal={setshowAddEditTransactionModal}
+          selectedItemForEdit={selectedItemForEdit}
           getTransactions={getTransactions}
+          setSelectedItemForEdit={setSelectedItemForEdit}
         />
       )}
     </DefaultLayout>
