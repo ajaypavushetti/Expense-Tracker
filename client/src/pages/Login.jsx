@@ -13,7 +13,8 @@ const Login = () => {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      const response = await axios.post("/api/users/login", values);
+      
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/login`, values); //
       localStorage.setItem(
         "TrackMint-user",
         JSON.stringify({ ...response.data, password: "" })
@@ -39,7 +40,7 @@ const Login = () => {
       <div className="row justify-content-center align-items-center w-100 h-100">
         <div className="col-md-4">
           <Form layout="vertical" onFinish={onFinish}>
-            <h1>LOGIN</h1>
+            <h1>TrackMinT / LOGIN</h1>
             <hr />
             <Form.Item label="Email" name="email">
               <Input />

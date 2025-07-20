@@ -13,11 +13,10 @@ const AddEditTransaction = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
-  // Function to prevent scroll wheel from changing number input value
+  
   const handleWheel = (e) => {
-    e.target.blur(); // Remove focus from the input
-    // Alternatively, you can prevent default behavior directly:
-    // e.preventDefault();
+    e.target.blur(); 
+    
   };
 
   const onFinish = async (values) => {
@@ -25,22 +24,24 @@ const AddEditTransaction = ({
       const user = JSON.parse(localStorage.getItem("TrackMint-user"));
       setLoading(true);
 
-      // Ensure amount is parsed as a number before sending
+     
       const transactionPayload = {
         ...values,
-        amount: Number(values.amount), // Explicitly convert amount to a Number
+        amount: Number(values.amount), 
         userid: user._id,
       };
 
       if (selectedItemForEdit) {
-        await axios.post("/api/transactions/edit-transaction", {
+        
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/transactions/edit-transaction`, { //
           payload: transactionPayload, // Use the prepared payload
           transactionId: selectedItemForEdit._id,
         });
         getTransactions();
         message.success("Transaction Updated Successfully");
       } else {
-        await axios.post("/api/transactions/add-transaction", transactionPayload); // Use the prepared payload
+        
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/transactions/add-transaction`, transactionPayload); //
         getTransactions();
         message.success("Transaction Added Successfully");
       }
@@ -69,7 +70,7 @@ const AddEditTransaction = ({
         initialValues={selectedItemForEdit}
       >
         <Form.Item label="Amount" name="amount">
-          {/* Add onWheel event handler to prevent value change on scroll */}
+        
           <Input type="number" onWheel={handleWheel} />
         </Form.Item>
 

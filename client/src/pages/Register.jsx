@@ -13,7 +13,8 @@ const Register = () => {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      await axios.post("/api/users/register", values);
+      
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/users/register`, values); //
       message.success("Registration Successful");
       setLoading(false);
     } catch (error) {
@@ -45,7 +46,7 @@ const Register = () => {
         </div>
         <div className="col-md-4">
           <Form layout="vertical" onFinish={onFinish}>
-            <h1>REGISTER</h1>
+            <h1>TrackMinT / REGISTER</h1>
             <hr />
             <Form.Item label="Name" name="name">
               <Input />

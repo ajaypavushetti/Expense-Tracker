@@ -34,8 +34,9 @@ const Home = () => {
       const user = JSON.parse(localStorage.getItem("TrackMint-user"));
 
       setLoading(true);
-      const response = await axios.post(
-        "/api/transactions/get-all-transactions",
+      
+      const response = await axios.post( //
+        `${import.meta.env.VITE_API_URL}/api/transactions/get-all-transactions`,
         {
           userid: user._id,
           frequency,
@@ -55,7 +56,8 @@ const Home = () => {
   const deleteTransaction = async (record) => {
     try {
       setLoading(true);
-      await axios.post("/api/transactions/delete-transaction", {
+      
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/transactions/delete-transaction`, { //
         transactionId: record._id,
       });
       message.success("Transaction Deleted Successfully");
@@ -98,20 +100,20 @@ const Home = () => {
       dataIndex: "actions",
       render: (text, record) => {
         return (
-          // Add a div here and make it a flex container
-          <div className="d-flex align-items-center"> {/* Use d-flex and align-items-center for vertical alignment */}
+         
+          <div className="d-flex align-items-center"> 
             <EditOutlined
               onClick={() => {
-                // Format the date to 'YYYY-MM-DD' before setting it for edit
+                
                 setSelectedItemForEdit({
                   ...record,
-                  date: moment(record.date).format('YYYY-MM-DD') // Format date here
+                  date: moment(record.date).format('YYYY-MM-DD') 
                 });
                 setshowAddEditTransactionModal(true);
               }}
             />
             <DeleteOutlined
-              className="mx-3" // This margin will now work correctly to space them
+              className="mx-3" 
               onClick={() => deleteTransaction(record)}
             />
           </div>
