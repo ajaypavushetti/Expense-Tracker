@@ -97,7 +97,8 @@ const Home = () => {
       dataIndex: "actions",
       render: (text, record) => {
         return (
-          <div>
+          // Add a div here and make it a flex container
+          <div className="d-flex align-items-center"> {/* Use d-flex and align-items-center for vertical alignment */}
             <EditOutlined
               onClick={() => {
                 setSelectedItemForEdit(record);
@@ -105,7 +106,7 @@ const Home = () => {
               }}
             />
             <DeleteOutlined
-              className="mx-3"
+              className="mx-3" // This margin will now work correctly to space them
               onClick={() => deleteTransaction(record)}
             />
           </div>

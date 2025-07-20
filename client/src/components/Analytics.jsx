@@ -12,9 +12,13 @@ const Analytics = ({ transactions }) => {
   );
 
   const totalIncomeTransactionsPercentage =
-    (totalIncomeTransactions.length / totalTransactions) * 100;
+    totalTransactions > 0
+      ? (totalIncomeTransactions.length / totalTransactions) * 100
+      : 0;
   const totalExpenseTransactionsPercentage =
-    (totalExpenseTransactions.length / totalTransactions) * 100;
+    totalTransactions > 0
+      ? (totalExpenseTransactions.length / totalTransactions) * 100
+      : 0;
 
   const totalTurnOver = transactions.reduce(
     (acc, transaction) => acc + Number(transaction.amount),
@@ -34,12 +38,15 @@ const Analytics = ({ transactions }) => {
   );
 
   const totalIncomeTurnOverPercentage =
-    (totalIncomeTurnOver / totalTurnOver) * 100;
-
+    totalTurnOver > 0 ? (totalIncomeTurnOver / totalTurnOver) * 100 : 0;
   const totalExpenseTurnOverPercentage =
-    (totalExpenseTurnOver / totalTurnOver) * 100;
+    totalTurnOver > 0 ? (totalExpenseTurnOver / totalTurnOver) * 100 : 0;
 
-  const categories = [
+  const allUniqueCategories = [
+    ...new Set(transactions.map((t) => t.category).filter(Boolean)), // filter(Boolean) removes null/undefined/empty string categories
+  ];
+
+  const baseCategories = [
     "salary",
     "entertainment",
     "freelance",
@@ -49,6 +56,10 @@ const Analytics = ({ transactions }) => {
     "education",
     "medical",
     "tax",
+  ];
+
+  const categoriesToDisplay = [
+    ...new Set([...baseCategories, ...allUniqueCategories]),
   ];
 
   return (
@@ -101,29 +112,109 @@ const Analytics = ({ transactions }) => {
         </div>
       </div>
 
-      <div className="row">
+      <div className="row mt-5">
         <div className="col-md-6">
-          <div className="income-category-analysis">
-            <h3>Income - Category Wise</h3>
-            {categories.map((category) => {
-              const amount = transactions
-                .filter(
-                  (t) => t.type === "income" && t.category === category
-                )
-                .reduce((acc, t) => acc + Number(t.amount), 0);
+          <div className="category-analysis">
+            <h4>Income - Category Wise</h4>
 
-              const percent =
-                totalIncomeTurnOver > 0
-                  ? Math.round((amount / totalIncomeTurnOver) * 100)
-                  : 0;
+            {(() => {
+              const incomeCategoryData = categoriesToDisplay
+                .map((category) => {
+                  const amount = transactions
+                    .filter(
+                      (t) => t.type === "income" && t.category === category
+                    )
+                    .reduce((acc, t) => acc + Number(t.amount), 0);
+                  return { category, amount };
+                })
+                .filter((data) => data.amount > 0)
+                .sort((a, b) => b.amount - a.amount);
 
-              return (
-               amount>0 && <div className="category-card" key={category}>
-                  <h5>{category}</h5>
-                  <Progress percent={percent} />
-                </div>
+              let sumRoundedIncomePercentages = 0;
+              const categoriesWithRoundedPercent = incomeCategoryData.map(
+                (data) => {
+                  const rawPercent =
+                    totalIncomeTurnOver > 0
+                      ? (data.amount / totalIncomeTurnOver) * 100
+                      : 0;
+                  const roundedPercent = Math.round(rawPercent);
+                  sumRoundedIncomePercentages += roundedPercent;
+                  return { ...data, roundedPercent };
+                }
               );
-            })}
+
+              if (
+                categoriesWithRoundedPercent.length > 0 &&
+                totalIncomeTurnOver > 0
+              ) {
+                const lastCategory =
+                  categoriesWithRoundedPercent[
+                    categoriesWithRoundedPercent.length - 1
+                  ];
+                lastCategory.roundedPercent +=
+                  100 - sumRoundedIncomePercentages;
+              }
+
+              return categoriesWithRoundedPercent.map((data) => (
+                <div className="category-card" key={data.category}>
+                  <h5>{data.category}</h5>
+                  <Progress percent={data.roundedPercent} />
+                </div>
+              ));
+            })()}
+            {/* FIX END */}
+          </div>
+        </div>
+
+        <div className="col-md-6">
+          <div className="category-analysis">
+            <h4>Expense - Category Wise</h4>
+
+            {(() => {
+              const expenseCategoryData = categoriesToDisplay
+                .map((category) => {
+                  const amount = transactions
+                    .filter(
+                      (t) => t.type === "expense" && t.category === category
+                    )
+                    .reduce((acc, t) => acc + Number(t.amount), 0);
+                  return { category, amount };
+                })
+                .filter((data) => data.amount > 0)
+                .sort((a, b) => b.amount - a.amount);
+
+              let sumRoundedExpensePercentages = 0;
+              const categoriesWithRoundedPercent = expenseCategoryData.map(
+                (data) => {
+                  const rawPercent =
+                    totalExpenseTurnOver > 0
+                      ? (data.amount / totalExpenseTurnOver) * 100
+                      : 0;
+                  const roundedPercent = Math.round(rawPercent);
+                  sumRoundedExpensePercentages += roundedPercent;
+                  return { ...data, roundedPercent };
+                }
+              );
+
+              if (
+                categoriesWithRoundedPercent.length > 0 &&
+                totalExpenseTurnOver > 0
+              ) {
+                const lastCategory =
+                  categoriesWithRoundedPercent[
+                    categoriesWithRoundedPercent.length - 1
+                  ];
+                lastCategory.roundedPercent +=
+                  100 - sumRoundedExpensePercentages;
+              }
+
+              return categoriesWithRoundedPercent.map((data) => (
+                <div className="category-card" key={data.category}>
+                  <h5>{data.category}</h5>
+                  <Progress percent={data.roundedPercent} />
+                </div>
+              ));
+            })()}
           </div>
         </div>
       </div>

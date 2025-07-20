@@ -14,8 +14,13 @@
 }
 
 .category-card{
-    padding: 20px;
+    padding: 10px 20px;
     box-shadow: 0 0 2px gray;
     margin-top: 15px;
     border-radius: 10px;
+}
+
+.table-analytics {
+  
+  width: 100%;
 }
