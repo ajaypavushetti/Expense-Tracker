@@ -45,7 +45,7 @@ const Register = () => {
         </div>
         <div className="col-md-4">
           <Form layout="vertical" onFinish={onFinish}>
-            <h1>TrackMinT / REGISTER</h1>
+            <h1>REGISTER</h1>
             <hr />
             <Form.Item label="Name" name="name">
               <Input />
