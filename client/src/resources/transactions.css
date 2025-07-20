@@ -38,7 +38,7 @@ body::-webkit-scrollbar-thumb {
 
 .filter {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
-  padding: 20px 25px;
+  padding: 20px 0;
   border-radius: 12px;
   margin-bottom: 25px;
   background-color: white;
@@ -107,7 +107,7 @@ body::-webkit-scrollbar-thumb {
 
 .content {
   height: 85vh;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.08);
   margin-top: 25px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
@@ -201,8 +201,8 @@ body::-webkit-scrollbar-thumb {
 
 @media screen and (max-width: 700px) {
   .layout {
-    margin: 0 !important;
-    width: 100vw !important;
+    margin: 0 15px !important;
+    width: auto !important;
     padding: 0 !important;
   }
 
@@ -221,25 +221,24 @@ body::-webkit-scrollbar-thumb {
 
 @media screen and (max-width: 600px) {
   .filter {
-    padding: 15px 15px;
+    padding: 15px;
     border-radius: 10px;
     margin-bottom: 20px;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .filter > div:first-of-type.d-flex {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    flex-direction: column;
     width: 100%;
-    margin-bottom: 10px;
-    align-items: flex-start;
+    margin-bottom: 15px;
     margin-left: 0 !important;
     margin-right: 0 !important;
     padding: 0 !important;
   }
 
   .filter .d-flex.flex-column {
-    width: calc(50% - 8px);
+    width: 100%;
     margin-bottom: 15px;
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -251,11 +250,9 @@ body::-webkit-scrollbar-thumb {
   }
 
   .filter > div:last-of-type.d-flex {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     width: 100%;
+    align-items: center;
     margin-top: 5px;
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -263,26 +260,28 @@ body::-webkit-scrollbar-thumb {
   }
 
   .view-switch {
-    margin-right: 15px !important;
-    margin-left: 0 !important;
-    padding: 6px 12px !important;
-    border-radius: 6px;
+    margin-right: 0 !important;
+    margin-bottom: 15px;
+    padding: 8px 15px !important;
+    width: 100%;
+    justify-content: center;
   }
 
   .primary {
-    width: auto !important;
+    width: 100% !important;
     flex-shrink: 0;
-    padding: 6px 12px !important;
+    padding: 8px 15px !important;
     font-size: 15px !important;
     height: auto !important;
     min-height: auto !important;
     line-height: 1 !important;
     margin: 0 !important;
-    border-radius: 6px !important;
+    border-radius: 8px !important;
   }
 
   .ant-table-wrapper {
     overflow-x: auto;
+    padding: 0;
   }
   .ant-table-wrapper::-webkit-scrollbar {
     height: 0px;

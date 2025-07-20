@@ -13,7 +13,10 @@ const Register = () => {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/users/register`, values);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/users/register`,
+        values
+      );
       message.success("Registration Successful");
       setLoading(false);
       // Added navigation to the login page after successful registration
@@ -47,7 +50,7 @@ const Register = () => {
         </div>
         <div className="col-md-4">
           <Form layout="vertical" onFinish={onFinish}>
-            <h1>TrackMinT / REGISTER</h1>
+            <h1>REGISTER</h1>
             <hr />
             <Form.Item label="Name" name="name">
               <Input />
