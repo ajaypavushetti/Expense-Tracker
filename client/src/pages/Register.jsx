@@ -8,15 +8,16 @@ import { useState } from "react";
 import Spinner from "../components/Spinner";
 
 const Register = () => {
-  const navigate = useNavigate(true);
+  const navigate = useNavigate(); // Corrected: removed 'true' argument
   const [loading, setLoading] = useState(false);
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/users/register`, values); //
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/users/register`, values);
       message.success("Registration Successful");
       setLoading(false);
+      // Added navigation to the login page after successful registration
+      navigate("/login"); // Navigate to the login page
     } catch (error) {
       message.error("something went wrong");
       setLoading(false);
@@ -46,7 +47,7 @@ const Register = () => {
         </div>
         <div className="col-md-4">
           <Form layout="vertical" onFinish={onFinish}>
-            <h1>REGISTER</h1>
+            <h1>TrackMinT / REGISTER</h1>
             <hr />
             <Form.Item label="Name" name="name">
               <Input />
