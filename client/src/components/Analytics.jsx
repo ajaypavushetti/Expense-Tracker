@@ -43,7 +43,7 @@ const Analytics = ({ transactions }) => {
     totalTurnOver > 0 ? (totalExpenseTurnOver / totalTurnOver) * 100 : 0;
 
   const allUniqueCategories = [
-    ...new Set(transactions.map((t) => t.category).filter(Boolean)), // filter(Boolean) removes null/undefined/empty string categories
+    ...new Set(transactions.map((t) => t.category).filter(Boolean)),
   ];
 
   const baseCategories = [
@@ -65,21 +65,24 @@ const Analytics = ({ transactions }) => {
   return (
     <div className="analytics">
       <div className="row">
+        {/* Total Transactions Box */}
         <div className="col-md-4 mt-3">
-          <div className="transactions-count">
-            <h4>Total Transactions : {totalTransactions}</h4>
-            <hr />
-            <h5>Income : {totalIncomeTransactions.length}</h5>
-            <h5>Expense : {totalExpenseTransactions.length}</h5>
-
-            <div className="progress-bars">
+          <div className="transactions-count d-flex flex-column justify-content-between h-100"> {/* Added d-flex, flex-column, justify-content-between, h-100 */}
+            <div> {/* Wrapper for title and basic stats */}
+              <h4>Total Transactions : {totalTransactions}</h4>
+              <hr />
+              <h5>Income : {totalIncomeTransactions.length}</h5>
+              <h5>Expense : {totalExpenseTransactions.length}</h5>
+            </div>
+            <div className="progress-bars d-flex justify-content-center align-items-center">
               <Progress
-                className="mx-5"
+                className="mx-2"
                 strokeColor="blue"
                 type="circle"
                 percent={Math.round(totalIncomeTransactionsPercentage)}
               />
               <Progress
+                className="mx-2"
                 strokeColor="red"
                 type="circle"
                 percent={Math.round(totalExpenseTransactionsPercentage)}
@@ -88,21 +91,24 @@ const Analytics = ({ transactions }) => {
           </div>
         </div>
 
+        {/* Total Turnover Box */}
         <div className="col-md-4 mt-3">
-          <div className="transactions-count">
-            <h4>Total Turnover : {totalTurnOver}</h4>
-            <hr />
-            <h5>Income : {totalIncomeTurnOver}</h5>
-            <h5>Expense : {totalExpenseTurnOver}</h5>
-
-            <div className="progress-bars">
+          <div className="transactions-count d-flex flex-column justify-content-between h-100"> {/* Added d-flex, flex-column, justify-content-between, h-100 */}
+            <div> {/* Wrapper for title and basic stats */}
+              <h4>Total Turnover : {totalTurnOver}</h4>
+              <hr />
+              <h5>Income : {totalIncomeTurnOver}</h5>
+              <h5>Expense : {totalExpenseTurnOver}</h5>
+            </div>
+            <div className="progress-bars d-flex justify-content-center align-items-center">
               <Progress
-                className="mx-5"
+                className="mx-2"
                 strokeColor="blue"
                 type="circle"
                 percent={Math.round(totalIncomeTurnOverPercentage)}
               />
               <Progress
+                className="mx-2"
                 strokeColor="red"
                 type="circle"
                 percent={Math.round(totalExpenseTurnOverPercentage)}
@@ -111,8 +117,8 @@ const Analytics = ({ transactions }) => {
           </div>
         </div>
       </div>
-
-      <div className="row mt-5">
+      <hr/>
+      <div className="row mt-3">
         <div className="col-md-6">
           <div className="category-analysis">
             <h4>Income - Category Wise</h4>
@@ -162,7 +168,6 @@ const Analytics = ({ transactions }) => {
                 </div>
               ));
             })()}
-            {/* FIX END */}
           </div>
         </div>
 
@@ -180,7 +185,7 @@ const Analytics = ({ transactions }) => {
                     .reduce((acc, t) => acc + Number(t.amount), 0);
                   return { category, amount };
                 })
-                .filter((data) => data.amount > 0)
+                    .filter((data) => data.amount > 0)
                 .sort((a, b) => b.amount - a.amount);
 
               let sumRoundedExpensePercentages = 0;

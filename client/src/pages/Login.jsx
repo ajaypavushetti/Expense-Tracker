@@ -1,14 +1,15 @@
 import { Form, Input, Button } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react"; // Import useState
 import { Link, useNavigate } from "react-router-dom";
 import "../resources/authentication.css";
 import axios from "axios";
 import { message } from "antd";
-import { useState } from "react";
 import Spinner from "../components/Spinner";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // Declare loading state here
+
   const onFinish = async (values) => {
     try {
       setLoading(true);

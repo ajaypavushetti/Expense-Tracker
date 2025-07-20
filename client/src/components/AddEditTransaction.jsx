@@ -3,6 +3,7 @@ import { Form, Input, message, Modal, Select } from "antd";
 import { useState } from "react";
 import axios from "axios";
 import Spinner from "./Spinner";
+
 const AddEditTransaction = ({
   setshowAddEditTransactionModal,
   showAddEditTransactionModal,
@@ -11,25 +12,35 @@ const AddEditTransaction = ({
   getTransactions,
 }) => {
   const [loading, setLoading] = useState(false);
+
+  // Function to prevent scroll wheel from changing number input value
+  const handleWheel = (e) => {
+    e.target.blur(); // Remove focus from the input
+    // Alternatively, you can prevent default behavior directly:
+    // e.preventDefault();
+  };
+
   const onFinish = async (values) => {
     try {
       const user = JSON.parse(localStorage.getItem("TrackMint-user"));
       setLoading(true);
+
+      // Ensure amount is parsed as a number before sending
+      const transactionPayload = {
+        ...values,
+        amount: Number(values.amount), // Explicitly convert amount to a Number
+        userid: user._id,
+      };
+
       if (selectedItemForEdit) {
         await axios.post("/api/transactions/edit-transaction", {
-          payload :{
-            ...values,
-          userid: user._id,
-          }, 
-          transactionId : selectedItemForEdit._id
+          payload: transactionPayload, // Use the prepared payload
+          transactionId: selectedItemForEdit._id,
         });
         getTransactions();
         message.success("Transaction Updated Successfully");
       } else {
-        await axios.post("/api/transactions/add-transaction", {
-          ...values,
-          userid: user._id,
-        });
+        await axios.post("/api/transactions/add-transaction", transactionPayload); // Use the prepared payload
         getTransactions();
         message.success("Transaction Added Successfully");
       }
@@ -42,6 +53,7 @@ const AddEditTransaction = ({
       setLoading(false);
     }
   };
+
   return (
     <Modal
       title={selectedItemForEdit ? "Edit Transaction" : "Add Transaction"}
@@ -57,7 +69,8 @@ const AddEditTransaction = ({
         initialValues={selectedItemForEdit}
       >
         <Form.Item label="Amount" name="amount">
-          <Input type="number" />
+          {/* Add onWheel event handler to prevent value change on scroll */}
+          <Input type="number" onWheel={handleWheel} />
         </Form.Item>
 
         <Form.Item label="Type" name="type">

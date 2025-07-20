@@ -14,7 +14,8 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
-import Analytics from "../components/Analytics";
+import Analytics from "../components/Analytics"; // Ensure this path is correct
+
 const { RangePicker } = DatePicker;
 
 const Home = () => {
@@ -101,7 +102,11 @@ const Home = () => {
           <div className="d-flex align-items-center"> {/* Use d-flex and align-items-center for vertical alignment */}
             <EditOutlined
               onClick={() => {
-                setSelectedItemForEdit(record);
+                // Format the date to 'YYYY-MM-DD' before setting it for edit
+                setSelectedItemForEdit({
+                  ...record,
+                  date: moment(record.date).format('YYYY-MM-DD') // Format date here
+                });
                 setshowAddEditTransactionModal(true);
               }}
             />
@@ -185,7 +190,7 @@ const Home = () => {
             />
           </div>
         ) : (
-          <Analytics transactions={transactionsData} />
+          <Analytics transactions={transactionsData} /> // Ensure Analytics component is correctly rendered
         )}
       </div>
 
