@@ -4,19 +4,20 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true,
+    unique: true, // Email must be unique
   },
   password: {
     type: String,
     required: true,
   },
+}, {
+  timestamps: true, // Adds createdAt and updatedAt timestamps
 });
 
-const usermodel = mongoose.model("users", userSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = usermodel;
+module.exports = User;
