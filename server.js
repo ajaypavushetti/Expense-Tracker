@@ -4,6 +4,11 @@ const app = express();
 const cors = require("cors");
 const path = require("path"); // Import the path module
 
+// Set NODE_ENV for local development if not already set
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'development';
+}
+
 app.use(express.json());
 
 const allowedOrigins = [
@@ -29,15 +34,16 @@ app.use(
 const userRoute = require("./routes/UsersRoute.js");
 const transactionsRoute = require("./routes/transactionsRoute.js");
 
-// Removed trailing slashes from the base paths (stylistic change, unlikely to fix the specific error)
+// These paths are checked for malformed parameters by path-to-regexp
 app.use("/api/users", userRoute); 
 app.use("/api/transactions", transactionsRoute);
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
-    // Set static folder
-    app.use(express.static('client/dist')); // Assuming 'client/dist' is your build folder
+    // This path is also checked
+    app.use(express.static('client/dist')); 
 
+    // This path is also checked
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html')); 
     });
