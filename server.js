@@ -29,8 +29,9 @@ app.use(
 const userRoute = require("./routes/UsersRoute.js");
 const transactionsRoute = require("./routes/transactionsRoute.js");
 
-app.use("/api/users/", userRoute);
-app.use("/api/transactions/", transactionsRoute);
+// Removed trailing slashes from the base paths (stylistic change, unlikely to fix the specific error)
+app.use("/api/users", userRoute); 
+app.use("/api/transactions", transactionsRoute);
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
@@ -38,10 +39,10 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/dist')); // Assuming 'client/dist' is your build folder
 
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html')); //
+        res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html')); 
     });
 }
 
 app.listen(3000, () => {
-  console.log("server running on port 3000"); //
+  console.log("server running on port 3000"); 
 });
